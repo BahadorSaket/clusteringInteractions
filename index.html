@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VisDemo</title>
+
+
+
+
+    <!--Vendor CSS files-->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="frontend/css/UI/UIStyle.css" rel="stylesheet">
+    <link href="frontend/css/AdditionalWidgets/d3-context-menu.css" rel="stylesheet">
+
+    <!--JS files-->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="//d3js.org/d3.v4.min.js"></script>
+    <script src="frontend/js/AdditionalWidgets/d3-context-menu.js"></script>
+    <script src="frontend/js/StartingVisualization/startVis.js"></script>
+    <script src="frontend/js/Clustering/drawBoundary.js"></script>
+    <script src="frontend/js/Clustering/createClustering.js"></script>
+    <script src="frontend/js/clone.js"></script>
+</head>
+<body ng-app="VisDemo">
+<div id='topPanel'>
+    <p style="font-size:20px; color:white; vertical-align: middle; margin:10px;">VisDemo</p>
+</div>
+<div id='mainbody'>
+    <div class="col-md-2" id='leftPanel'>
+        <div id="div1" style="height:92%;">
+            <div id="detailPanel" class="subPanelsDetail">
+                <div class="table">
+                </div>
+            </div>
+            <div id="controlPanel" class="subPanelsCheckBox">
+                <div id="panelTitle" > Filter your data
+                    <button class="btn createVis" style="background-color:#337ab7; margin: 10px;" type="button"> Filter</button>
+                </div>
+                <div class="checkboxPanel">
+                </div>
+            </div>
+            <div id="suggestionPanel" class="subPanels"></div>
+            <div id="actionPanel" class="subPanels" ng:controller="MainCtrl">
+                <!-- <label ng-repeat="(color,enabled) in colors">
+                    <input type="checkbox" ng-model="colors[color]"> {{color}}
+                </label> -->
+                <select style="width:300px;" ng-model="selectedDisease" ng-options="x.name for x in diseases">
+                </select>
+
+                <h4>{{selectedDisease.name}}</h4>
+
+                <!-- <input type="text" id="rulesInput" style ="background-color:rgba(0,0,0,0.7);border:0px;"/>-->
+                <button class="btn btn-primary" style="background-color:#337ab7; margin: 10px;" id="getRulesButton" ng-click="getRulesFromBackend(selectedDisease.id)">Get Recommendations</button>
+                <div id="ruleRecommendationResults" style ="background-color:#2F2C2C"></div>
+            </div>
+        </div>
+        <div id="div2">
+            <ul class="nav nav-pills">
+                <li><a href="javascript:suggestionPanelCalled();" id='recomIcon' class="SwitchPanel">Suggestions</a></li>
+                <li><a href="javascript:controlPanelCalled();" id='controPanelIcon' class="SwitchPanel"></i> Filter</a></li>
+                <li><a href="javascript:actionPanelCalled();" id='actionIcon' class="SwitchPanel"></i>Actions</a></li>
+                <li class="active"><a href="javascript:detailPanelCalled();" id='detailIcon' class="SwitchPanel"></i>Details</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="VisContainer"></div>
+
+    <!-- <div id="rightPanel">
+        <div class="RightMenueIcon"><i class="fa fa-mouse-pointer fa-lg SelectIcon" aria-hidden="true"></i></div>
+        <div class="RightMenueIcon"><i class="material-icons  md-light colorIcon md-32">color_lens</i></div>
+        <div class="RightMenueIcon"><i class="material-icons  md-light dragIcon md-32">touch_app</i></div>
+    </div> -->
+</div>
+</body>
+<!--
+
+-->
+<script src="frontend/js/UI/ui.js"></script>
+<script src="frontend/js/UI/global.js"></script>
+<script src="frontend/js/UI/showRecom.js"></script>
+<script src="frontend/js/UI/loadAttributeSelectors.js"></script>
+<script src="frontend/js/UI/main.js"></script>
+
+<script  type="text/javascript">
+    $("#VisContainer").height($(window).height());
+    $("#leftPanel").height($(window).height()-40);
+    $("#rightPanel").height($(window).height());
+</script>
+<script>
+    $("#actionPanel").hide();
+
+</script>
+</html>
