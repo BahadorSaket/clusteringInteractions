@@ -49,10 +49,9 @@ function startVis (dataset) {
       .on('mouseenter', function(d,i) {
         ShowDetail(i);
       });
-      // .attr("width", function(d){ return rectWidth;})
-      // .attr("height", function(d){ return rectWidth;})
-}
 
+  clusters = createClustering();
+}
 
 function dragstarted(d) {
   d3.select(this).select('circle').classed("dragActive", true);
@@ -66,10 +65,16 @@ function dragged(d) {
 function dragended(d) {
   d3.select(this).select('circle').classed("dragActive", false);
 
-  value = d3.select(this).attr("id");
+  var interactedItem = d3.select(this).attr("id");
+
+  updateCirclesPostition(dataset,clusters, interactedItem);
+
+/*
+
   if($.inArray(value, list) == -1)
   {
     list.push(value);
     drawBoundary(value);
   }
+*/
 }

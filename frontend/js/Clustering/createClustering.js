@@ -17,8 +17,7 @@ function returnClusterIndex(clusters, index){
 }
 
 
-function updateCirclesPostition(clusters){
-  //var svg= d3.select("#Vis");
+function circlesPostition(clusters){
 
   svg.selectAll('.dot')
      .transition()
@@ -55,11 +54,11 @@ function drawClusters(clusters){
          .attr('stroke', 'white')
          .style("fill", function(d,i) {return clusterColor[Number(i)]; } )
          .attr('opacity', 0.1)
-         .attr("id", function(d,i){return "g_cluster_rect_"+clusterIndex;})
+         .attr("id", function(d,i){return "g_cluster_rect_"+i;})
          .attr("width", function(d,i){ return clusters[i].clusterWidth;})
          .attr("height", function(d,i){ return clusters[i].clusterHeight;})
 
-  setTimeout(function(){ updateCirclesPostition(clusters); }, 100);
+  setTimeout(function(){ circlesPostition(clusters); }, 100);
 
 
 }
@@ -137,4 +136,5 @@ function createClustering(){
 
   let uniqueClusters = [...new Set(dataToCluster)];
   var clusters = structuredClusters(uniqueClusters);
+  return clusters;
 }
