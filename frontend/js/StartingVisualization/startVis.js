@@ -67,14 +67,11 @@ function dragended(d) {
 
   var interactedItem = d3.select(this).attr("id");
 
-  updateCirclesPostition(dataset,clusters, interactedItem);
-
-/*
-
-  if($.inArray(value, list) == -1)
+  if($.inArray(interactedItem, list) == -1)
   {
-    list.push(value);
-    drawBoundary(value);
+    list.push(interactedItem);
   }
-*/
+
+  updateCirclesPostition(matrixDataset, matrixAttrNames, clusters, list, interactedItem);
+
 }
