@@ -1,56 +1,58 @@
 // Hannah's code
-function updateCirclesPostition(matrixDataset, matrixAttrNames, clusters, list, lastInteractedItem){
-
-  // This is matrix format of our dataset
-  console.log(matrixDataset);
-
-  // This is Attribute names for each column int he matrix
-  console.log(matrixAttrNames);
-
-  // This includes cluster's id, number of data items in each cluster, id of the data points inside each cluster, x postion, y poistion, width and height of the clusters.
-  console.log(clusters);
-
-  //list of interacted item and last interacted item
-  console.log(list, lastInteractedItem)
+function updateCirclesPostition(dataset, matrixDataset, matrixAttrNames, clusters, sublist, interactedCluster){
+    var points = clusters[interactedCluster]["Points"];
+    var x = [];
+    var y = [];
+    var w = [];
+    var A = [];
+    for (var i=0; i<points.length; i++) {
+        var interactedIndex = sublist.indexOf(points[i])
+        if ( interactedIndex == -1) {
+            w[i] = 1;
+        } else { // if interacted, weight can be 100~200% of uninteracted items
+            w[i] = 1 + (interactedIndex+1)/sublist.length;
+        }
+        x[i] = dataset[points[i]]["x"] * w[i];
+        y[i] = dataset[points[i]]["y"] * w[i];
+        var row = [];
+        for (var j=0; j<matrixDataset.length; j++) {
+            row[j] = matrixDataset[j][i] * w[i];
+        }
+        A[i] = row;
+    }
     
-
+//    A = [[1,2,3],[3,4,5]];x=[5,6,7];y=[3,2];
+    beta_x = solve(A, x);
+    beta_y = solve(A, y);
+    console.log(beta_x);
+    console.log(beta_y);
+    return {"beta_x": beta_x, "beta_y": beta_y};
 }
 
-// from VbD —---------------------------------------
-var excludedAttributes=["ID","Type","Name","x","y","color","r","ial"];
+function solve(A, b) {
+    var lab = new Lalolab();
+    lab.load(A, "A", function(result) {
+//		console.log(laloprint(result,true));
+	}); 
+    lab.load(b, "b", function(result) {
+//		console.log(laloprint(result,true));
+	}); 
+	lab.do("x = solve(A,b)");
+	lab.getObject("x", function(x) {
+        console.log(x);
+		return x;
+	});
+//    lab.close();
+}
 
-// This function returns a list of attributes that have numerical values and will be counted in our calculations.
-function getAttributes(dataset)
-{
-  var Attr= Object.keys(dataset[0]);
-  var attrTemp =[];
-  for (var i=0; i<Attr.length; i++)
-  {
-    if(excludedAttributes.indexOf(Attr[i]) == -1) // this check if all data attributes are numerical
-    {
-      attrTemp.push(Attr[i]);
+function getCoord(matrixDataset, beta) {
+    var coord = [];
+    for (var i=0; i<matrixDataset[0].length; i++) {
+        var tmp = 0;
+        for (var j=0; j<matrixDataset.length; j++) {
+            tmp = tmp + beta[j]*matrixDataset[j][i];
+        }
+        coord[i] = tmp;
     }
-  }
-  return attrTemp;
-}
-
-//This function returns an array which contains normalized value of all data attributes.
-function getNormalizedData(data, Attr){
-  var data_norm = [];
-
-  for (var i=0; i<Attr.length; i++) {
-    var min = d3.min(data, function(d,j){ return +data[j][Attr[i]];})
-    var max = d3.max(data, function(d,j){ return +data[j][Attr[i]];})
-    var tmpAttr = [];
-    for (var k=0; k<data.length; k++) {
-      tmpAttr[k] = (data[k][Attr[i]]-min)/(max-min);
-    }
-    data_norm.push({[Attr[i]]:tmpAttr});
-  }
-  return data_norm;
-}
-
-function init(){
-    Attr = getAttributes(dataset);
-    data_norm = getNormalizedData(data, Attr);
+    return coord;
 }

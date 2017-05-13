@@ -51,6 +51,7 @@ function startVis (dataset) {
       });
 
   clusters = createClustering();
+  list = (function(a){ while(a.push([]) < clusters.length); return a})([]);
 }
 
 function dragstarted(d) {
@@ -65,15 +66,21 @@ function dragged(d) {
 function dragended(d) {
   d3.select(this).select('circle').classed("dragActive", false);
 
-  var interactedItem = d3.select(this).attr("id");
-    console.log(this);
-    console.log(d3.select(this));
+  var interactedItem = +d3.select(this).attr("id").replace(/[^\d.]/g, '');
+  var interactedCluster = whichCluster(clusters, interactedItem);
 
-  if($.inArray(interactedItem, list) == -1)
-  {
-    list.push(interactedItem);
+  if(!list[interactedCluster].includes(interactedItem)) {
+    list[interactedCluster].push(interactedItem);
   }
 
-  updateCirclesPostition(matrixDataset, matrixAttrNames, clusters, list, interactedItem);
+  updateCirclesPostition(dataset, matrixDataset, matrixAttrNames, clusters, list[interactedCluster], interactedCluster);
+}
 
+function whichCluster(clusters, id) {
+    for (var i=0; i<clusters.length; i++) {
+        if(clusters[i]["Points"].includes(+id)) {
+            return i;
+        }
+    }
+    return -1;
 }

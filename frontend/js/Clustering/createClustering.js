@@ -111,7 +111,7 @@ function structuredClusters(uniqueClusters){
       if(uniqueClusters[i]== dataset[j].Make)
       {
         count ++;
-        listOfPoints.push(dataset[j].ID);
+        listOfPoints.push(+dataset[j].ID);
       }
     }
     var HeightOfClusters =  (svgHeight - (Math.ceil(uniqueClusters.length / 2)*clusterPadding)) / Math.ceil(uniqueClusters.length / 2);
