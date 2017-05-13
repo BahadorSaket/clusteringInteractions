@@ -66,6 +66,8 @@ function dragended(d) {
   d3.select(this).select('circle').classed("dragActive", false);
 
   var interactedItem = d3.select(this).attr("id");
+    console.log(this);
+    console.log(d3.select(this));
 
   if($.inArray(interactedItem, list) == -1)
   {
